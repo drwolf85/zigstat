@@ -3,3 +3,7 @@
 *.a
 *.so
 *.o
+zig-cache/*
+zig-cache/*/*
+zig-out/*
+zig-out/*/*
