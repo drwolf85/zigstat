@@ -6,13 +6,12 @@ export fn absolute_error(approx: f64, truth: f64) f64 {
 }
 
 export fn relative_error(approx: f64, truth: f64) f64 {
-    var err: f64 = approx - truth;
+    const err: f64 = approx - truth;
     return err / truth;
 }
 
 export fn approx_value(truth: f64, rel_err: f64) f64 {
-    var aprx: f64 = truth * (1.0 + rel_err);
-    return aprx;
+    return truth * (1.0 + rel_err);
 }
 
 
@@ -25,3 +24,4 @@ test "\nBasic error functions" {
     print("Approx. val. (2.0, 1%): {}\n", 
               .{approx_value(2.0, 0.01)});
 }
+
