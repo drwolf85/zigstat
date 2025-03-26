@@ -1,6 +1,6 @@
 const std = @import("std");
-pub extern fn lgamma(f64) f64;
-var rnd = std.rand.DefaultPrng.init(888);
+extern "c" fn lgamma(f64) f64;
+var rnd = std.Random.DefaultPrng.init(888);
 
 inline fn bool2float(arg_x: bool) f64 {
     return @as(f64, @floatFromInt(@intFromBool(arg_x)));
@@ -64,7 +64,7 @@ pub export fn rbinom(arg_n: u32, arg_prob: f64) f64 {
     return z;
 }
 
-// zig test binom.zig -lm # Run this line on the terminal to test the following function
+// zig test binomial.zig -lm # Run this line on the terminal to test the following function
 test "\nBasic functions for the Binomail distribution" {
     std.debug.print("choose(5, 3) = {d:.0}\n", .{binom(5, 3)});
     std.debug.print("dbinom(1, 5, 0.25) = {d:.8}\n", .{dbinom(1, 5, 0.25)});

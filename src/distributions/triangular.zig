@@ -1,5 +1,5 @@
 const std = @import("std");
-var rnd = std.rand.DefaultPrng.init(888);
+var rnd = std.Random.DefaultPrng.init(888);
 
 inline fn bool2float(arg_x: bool) f64 {
     return @as(f64, @floatFromInt(@intFromBool(arg_x)));
@@ -32,8 +32,8 @@ pub export fn ptriang(arg_x: f64, arg_m: f64, arg_s: f64) f64 {
 
 pub export fn qtriang(arg_p: f64, arg_m: f64, arg_s: f64) f64 {
     var z: f64 = undefined;
-    var v: f64 = bool2float(arg_p >= 0.5) * (1.0 - (2.0 * arg_p));
-    var sgn: f64 = 2.0 * bool2float(arg_p > 0.5) - 1.0;
+    const v: f64 = bool2float(arg_p >= 0.5) * (1.0 - (2.0 * arg_p));
+    const sgn: f64 = 2.0 * bool2float(arg_p > 0.5) - 1.0;
     if (((arg_p >= 0.0) and (arg_p <= 1.0)) and (arg_s >= 0.0)) {
         z = arg_p + v;
     }
@@ -42,9 +42,9 @@ pub export fn qtriang(arg_p: f64, arg_m: f64, arg_s: f64) f64 {
 }
 
 pub export fn rtriang(arg_mu: f64, arg_sd: f64) f64 {
-    var u: u32 = rnd.random().int(u32);
+    const u: u32 = rnd.random().int(u32);
     var m: u32 = (1 << 16) - 1;
-    var v: u32 = (((u >> 16) & m) | ((u & m) << 16));
+    const v: u32 = (((u >> 16) & m) | ((u & m) << 16));
     m = ~@as(u32, 1 << 31);
     const a: f64 = std.math.ldexp(@as(f64, @floatFromInt(u & m)), -31);
     const b: f64 = std.math.ldexp(@as(f64, @floatFromInt(v & m)), -31);

@@ -1,7 +1,7 @@
 const std = @import("std");
 const mln2x31 = 31.0 * 0.6931471805599453;
 
-var rnd = std.rand.DefaultPrng.init(888);
+var rnd = std.Random.DefaultPrng.init(888);
 
 pub export fn dexp(arg_x: f64, arg_lambda: f64) f64 {
     var z: f64 = undefined;
@@ -35,7 +35,7 @@ pub export fn qexp(arg_p: f64, arg_lambda: f64) f64 {
 
 pub export fn rexp(arg_lambda: f64) f64 {
     var u: u32 = rnd.random().int(u32);
-    var m: u32 = ~@as(u32, 1 << 31);
+    const m: u32 = ~@as(u32, 1 << 31);
     var z: f64 = undefined;
     if (arg_lambda >= 0.0) {
         u &= m;
@@ -46,7 +46,7 @@ pub export fn rexp(arg_lambda: f64) f64 {
     return z;
 }
 
-//  zig test exponential.zig -lm # Run this line on the terminal to test the following function
+//  zig test exponential.zig # Run this line on the terminal to test the following function
 test "\nBasic functions for the Exponential distribution" {
     std.debug.print("\ndexp(1.64, 2) = {}\n", .{dexp(1.64, 2.0)});
     std.debug.print("pexp(1.64, 2) = {}\n", .{pexp(1.64, 2.0)});

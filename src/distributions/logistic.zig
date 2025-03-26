@@ -1,5 +1,5 @@
 const std = @import("std");
-var rnd = std.rand.DefaultPrng.init(888);
+var rnd = std.Random.DefaultPrng.init(888);
 
 pub export fn dlogis(arg_x: f64, arg_m: f64, arg_s: f64) f64 {
     var s = arg_s;
@@ -33,14 +33,14 @@ pub export fn qlogis(arg_p: f64, arg_m: f64, arg_s: f64) f64 {
 
 pub export fn rlogis(arg_mu: f64, arg_sd: f64) f64 {
     var u: u32 = rnd.random().int(u32);
-    var m: u32 = ~@as(u32, 1 << 31);
+    const m: u32 = ~@as(u32, 1 << 31);
     var z: f64 = undefined;
     u &= m;
     z = std.math.ldexp(@as(f64, @floatFromInt(u)), -31);
     return qlogis(z, arg_mu, arg_sd);
 }
 
-// zig test logistic.zig -lm # Run this line on the terminal to test the following function
+// zig test logistic.zig # Run this line on the terminal to test the following function
 test "\nBasic functions for the Logistic distribution" {
     std.debug.print("\ndlogis(-1.64, 0.0, 1.0) = {}\n", .{dlogis(-1.64, 0.0, 1.0)});
     std.debug.print("plogis(-1.64, 0.0, 1.0) = {}\n", .{plogis(-1.64, 0.0, 1.0)});

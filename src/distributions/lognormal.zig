@@ -1,5 +1,5 @@
 const std = @import("std");
-var rnd = std.rand.DefaultPrng.init(888);
+var rnd = std.Random.DefaultPrng.init(888);
 extern "c" fn erf(f64) f64;
 
 const sqrt2pi: f64 = @sqrt(2.0 * std.math.pi);
@@ -42,7 +42,7 @@ pub export fn rlognorm(arg_mu: f64, arg_sd: f64) f64 {
     v &= m;
     var a: f64 = std.math.ldexp(@as(f64, @floatFromInt(u)), -30) - 1.0;
     var s: f64 = a * a;
-    var b: f64 = std.math.ldexp(@as(f64, @floatFromInt(v)), -30) - 1.0;
+    const b: f64 = std.math.ldexp(@as(f64, @floatFromInt(v)), -30) - 1.0;
     s += b * b * (1.0 - s);
     s = -2.0 * @log(s) / s;
     a = b * @sqrt(s);

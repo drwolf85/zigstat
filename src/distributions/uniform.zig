@@ -1,5 +1,5 @@
 const std = @import("std");
-var rnd = std.rand.DefaultPrng.init(888);
+var rnd = std.Random.DefaultPrng.init(888);
 
 pub export fn dunif(arg_x: f64, arg_a: f64, arg_b: f64) f64 {
     var z: f64 = undefined;
@@ -39,8 +39,8 @@ pub export fn qunif(arg_p: f64, arg_a: f64, arg_b: f64) f64 {
 
 pub export fn runif(arg_a: f64, arg_b: f64) f64 {
     var z: f64 = undefined;
-    var u: u32 = rnd.random().int(u32);
-    var m: u32 = ~@as(u32, 1 << 31);
+    const u: u32 = rnd.random().int(u32);
+    const m: u32 = ~@as(u32, 1 << 31);
     if (arg_b > arg_a) {
         z = std.math.ldexp(@as(f64, @floatFromInt(u & m)), -31);
         z *= arg_b - arg_a;

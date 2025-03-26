@@ -1,5 +1,5 @@
 const std = @import("std");
-var rnd = std.rand.DefaultPrng.init(888);
+var rnd = std.Random.DefaultPrng.init(888);
 
 inline fn bool2float(arg_x: bool) f64 {
     return @as(f64, @floatFromInt(@intFromBool(arg_x)));
@@ -32,8 +32,8 @@ pub export fn qbern(arg_p: f64, arg_prob: f64) u8 {
 }
 
 pub export fn rbern(arg_prob: f64) u8 {
-    var u: u32 = rnd.random().int(u32);
-    var m: u32 = ~@as(u32, 1 << 31);
+    const u: u32 = rnd.random().int(u32);
+    const m: u32 = ~@as(u32, 1 << 31);
     var z: u1 = undefined;
     if ((arg_prob >= 0.0) and (arg_prob <= 1.0)) {
         z = @intFromBool(std.math.ldexp(@as(f64, @floatFromInt(u & m)), -31) <= arg_prob);
@@ -41,7 +41,7 @@ pub export fn rbern(arg_prob: f64) u8 {
     return @as(u8, z);
 }
 
-//  zig test bernoulli.zig -lm # Run this line on the terminal to test the following function
+//  zig test bernoulli.zig # Run this line on the terminal to test the following function
 test "\nBasic functions for the Bernoulli distribution" {
     std.debug.print("\ndbern(true, 0.5) = {}\n", .{dbern(true, 0.5)});
     std.debug.print("pbern(true, 0.750) = {}\n", .{pbern(true, 0.75)});

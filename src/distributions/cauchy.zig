@@ -1,5 +1,5 @@
 const std = @import("std");
-var rnd = std.rand.DefaultPrng.init(888);
+var rnd = std.Random.DefaultPrng.init(888);
 
 pub export fn dcauchy(arg_x: f64, arg_m: f64, arg_s: f64) f64 {
     var x = arg_x;
@@ -34,12 +34,12 @@ pub export fn qcauchy(arg_p: f64, arg_m: f64, arg_s: f64) f64 {
 }
 
 pub export fn rcauchy(arg_mu: f64, arg_sd: f64) f64 {
-    var u: u32 = rnd.random().int(u32);
-    var m: u32 = ~@as(u32, 1 << 31);
+    const u: u32 = rnd.random().int(u32);
+    const m: u32 = ~@as(u32, 1 << 31);
     return qcauchy(std.math.ldexp(@as(f64, @floatFromInt(u & m)), -31), arg_mu, arg_sd);
 }
 
-// zig test cauchy.zig -lm # Run this line on the terminal to test the following function
+// zig test cauchy.zig # Run this line on the terminal to test the following function
 test "\nBasic functions for the Cauchy distribution" {
     std.debug.print("\ndcauchy(-1.64, 0.0, 1.0) = {}\n", .{dcauchy(-1.64, 0.0, 1.0)});
     std.debug.print("pcauchy(-1.64, 0.0, 1.0) = {}\n", .{pcauchy(-1.64, 0.0, 1.0)});

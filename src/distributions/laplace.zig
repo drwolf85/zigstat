@@ -1,5 +1,5 @@
 const std = @import("std");
-var rnd = std.rand.DefaultPrng.init(888);
+var rnd = std.Random.DefaultPrng.init(888);
 
 pub export fn dlaplace(arg_x: f64, arg_m: f64, arg_s: f64) f64 {
     var s = arg_s;
@@ -40,7 +40,7 @@ pub export fn rlaplace(arg_mu: f64, arg_sd: f64) f64 {
     return qlaplace(z, arg_mu, arg_sd);
 }
 
-//  zig test laplace.zig -lm # Run this line on the terminal to test the following function
+//  zig test laplace.zig # Run this line on the terminal to test the following function
 test "\nBasic functions for the Laplace distribution" {
     std.debug.print("\ndlaplace(-1.64, 0, 1) = {}\n", .{dlaplace(-1.64, 0.0, 1.0)});
     std.debug.print("plaplace(-1.64, 0, 1) = {}\n", .{plaplace(-1.64, 0.0, 1.0)});
