@@ -2,19 +2,19 @@ const std = @import("std");
 const math = std.math;
 const testing = std.testing;
 
-pub fn factorial(x: f64) f64 {
+pub export fn factorial(x: f64) f64 {
 	var res : f64 = x + 1.0;
 	res = math.lgamma(f64, res);
 	return @exp(res);
 }
 
-pub fn stirling(x: f64) f64 {
+pub export fn stirling(x: f64) f64 {
 	var res = x * @log(x) - x;
 	res += 0.5 * @log(math.pi * 2.0 * x);
 	return @exp(res);
 }
 
-pub fn gosper(x: f64) f64 {
+pub export fn gosper(x: f64) f64 {
 	var res = x * @log(x) - x;
 	res += 0.5 * @log(math.pi * (2.0 * x + 1.0 / 3.0));
 	return @exp(res);
