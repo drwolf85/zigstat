@@ -1,5 +1,6 @@
 const std = @import("std");
-var rnd = std.Random.DefaultPrng.init(888);
+var prng = std.Random.DefaultPrng.init(888);
+const rnd = prng.random();
 extern "c" fn erf(f64) f64;
 
 const sqrt2pi = @sqrt(2.0 * std.math.pi);
@@ -35,18 +36,25 @@ pub fn qnorm(comptime T: type, arg_p: T, arg_m: T, arg_s: T) T {
 }
 
 pub fn rnorm(comptime T: type, arg_mu: T, arg_sd: T) T {
-    var m: u32 = (1 << 16) - 1;
-    var u: u32 = rnd.random().int(u32);
-    var v: u32 = (((u >> 16) & m) | ((u & m) << 16));
-    m = ~@as(u32, 1 << 31);
-    u &= m;
-    v &= m;
-    var a: T = @as(T, @floatCast(std.math.ldexp(@as(f64, @floatFromInt(u)), -30) - 1.0));
-    var s: T = a * a;
-    const b: T = @as(T, @floatCast(std.math.ldexp(@as(f64, @floatFromInt(v)), -30) - 1.0));
-    s += b * b * (1.0 - s);
-    s = -2.0 * @log(s) / s;
-    a = b * @sqrt(s);
+    var a: T = undefined;
+    if (T != f128) {
+	@branchHint(.unlikely);
+        a = rnd.floatNorm(T);
+    }
+    else {
+        var m: u32 = (1 << 16) - 1;
+        var u: u32 = rnd.int(u32);
+        var v: u32 = (((u >> 16) & m) | ((u & m) << 16));
+        m = ~@as(u32, 1 << 31);
+        u &= m;
+        v &= m;
+        a = @as(T, @floatCast(std.math.ldexp(@as(f64, @floatFromInt(u)), -30) - 1.0));
+        var s: T = a * a;
+        const b: T = @as(T, @floatCast(std.math.ldexp(@as(f64, @floatFromInt(v)), -30) - 1.0));
+        s += b * b * (1.0 - s);
+        s = -2.0 * @log(s) / s;
+        a = b * @sqrt(s);
+    }
     return arg_mu + arg_sd * a;
 }
 
